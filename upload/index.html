@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Game Upload</title>
+<meta name="description" content="Upload a Sunday pickup game video. Passcode required.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=Doto:wght@700;900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../hud.css?v=3">
+<style>
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font:15px/1.5 var(--h-sans);padding-block:40px 80px;padding-inline:clamp(16px,4vw,48px)}
+.wrap{max-width:980px;margin:0 auto;display:grid;gap:22px}
+header{border-bottom:1px solid var(--h-line);padding-bottom:18px;position:relative;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:14px}
+header::after{content:"";position:absolute;left:0;bottom:-1px;width:120px;height:1px;background:var(--h-coral);box-shadow:0 0 10px var(--h-coral)}
+h1{margin:10px 0 0;font:700 clamp(2.4rem,7vw,4.4rem)/.9 var(--h-disp);text-transform:uppercase;letter-spacing:-.01em}
+h1 em{font:900 1em/.9 var(--h-dot);font-style:normal;color:var(--h-coral);text-shadow:0 0 18px rgba(255,90,54,.45)}
+header p{margin:12px 0 0;color:var(--h-ink2);max-width:62ch}
+.back{font:500 10.5px var(--h-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--h-ink2);text-decoration:none;border:1px solid var(--h-line2);padding:8px 12px}
+.back:hover{border-color:var(--h-coral);color:#fff}
+.panel{padding:20px}
+label.f{display:grid;gap:6px;font:500 10.5px var(--h-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--h-ink3)}
+input[type=text],input[type=password],input[type=date]{font:400 15px var(--h-sans);color:var(--h-ink);background:var(--h-bg);border:1px solid var(--h-line2);border-radius:1px;padding:10px 12px;min-width:0;color-scheme:dark}
+input:focus{outline:1px solid var(--h-coral);border-color:var(--h-coral)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:end}
+.row>label{flex:1 1 200px}
+.btn{font:500 11px/1 var(--h-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--h-ink);background:transparent;border:1px solid var(--h-line2);border-radius:1px;padding:12px 16px;cursor:pointer}
+.btn:hover{border-color:var(--h-coral)}
+.btn.pri{background:var(--h-coral);border-color:var(--h-coral);color:#160604;box-shadow:0 0 16px rgba(255,90,54,.3)}
+.btn:disabled{opacity:.4;cursor:default;box-shadow:none}
+.drop{display:grid;place-items:center;text-align:center;gap:8px;min-height:190px;padding:28px;border:1px dashed var(--h-line2);cursor:pointer;transition:border-color .2s,background .2s}
+.drop:hover,.drop.over{border-color:var(--h-coral);background:#110b09}
+.drop b{font:600 1.5rem var(--h-disp);text-transform:uppercase;letter-spacing:.02em}
+.drop span{color:var(--h-ink2);font-size:.9rem}
+.job{padding:18px 20px;display:grid;gap:12px}
+.job .top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;align-items:baseline}
+.job .nm{font:600 1.25rem/1.15 var(--h-disp);text-transform:uppercase;letter-spacing:.01em;word-break:break-all}
+.job .st{font:500 10.5px var(--h-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--h-ink2)}
+.job .st.ok{color:#2fd27a}.job .st.err{color:var(--h-red)}
+.read{display:flex;flex-wrap:wrap;gap:8px 28px;align-items:baseline}
+.read .pct{font:900 clamp(2.6rem,8vw,3.6rem)/1 var(--h-dot);color:var(--h-coral);text-shadow:0 0 16px rgba(255,90,54,.5);font-variant-numeric:tabular-nums;min-width:3.2ch}
+.read dl{display:grid;grid-template-columns:repeat(4,auto);gap:2px 22px;margin:0}
+.read dt{font:500 9.5px var(--h-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--h-ink3)}
+.read dd{margin:0;font:600 14px var(--h-mono);font-variant-numeric:tabular-nums}
+@media (max-width:560px){.read dl{grid-template-columns:repeat(2,auto)}}
+.cells{display:grid;grid-template-columns:repeat(auto-fill,minmax(14px,1fr));gap:3px}
+.cell{height:22px;background:var(--h-panel2);border:1px solid var(--h-line);position:relative;overflow:hidden}
+.cell i{position:absolute;left:0;top:0;bottom:0;background:rgba(255,90,54,.55)}
+.cell.done{background:var(--h-coral);border-color:var(--h-coral);box-shadow:0 0 8px rgba(255,90,54,.45)}
+.cell.done i{display:none}
+.cell.err{border-color:var(--h-red);background:rgba(255,91,77,.25)}
+.job .acts{display:flex;gap:8px;flex-wrap:wrap}
+.msg{font:500 12px/1.5 var(--h-mono);letter-spacing:.04em;color:var(--h-amber)}
+.list{display:grid;gap:1px;background:var(--h-line);border:1px solid var(--h-line)}
+.list div{background:var(--h-panel);padding:10px 14px;display:grid;grid-template-columns:1fr auto;gap:2px 14px}
+.list b{font:600 1rem var(--h-disp);text-transform:uppercase;word-break:break-all}.list span{font:400 12px var(--h-mono);color:var(--h-ink2)}
+.list .r{text-align:right}
+.note{font-size:13px;color:var(--h-ink3)}
+#gate .panel{max-width:420px}
+</style>
+</head>
+<body>
+<div class="hud-screen" aria-hidden="true"></div>
+<div class="hud-frame" aria-hidden="true"><span class="cm tl"></span><span class="cm tr"></span><span class="cm bl"></span><span class="cm br"></span>
+<span class="lab l1">Upload · Sunday pickup</span><span class="lab l2">Bucket sunday_pickup_game <i>✶</i> resumable</span></div>
+<div class="hud-ticker" aria-hidden="true"><div class="run" id="hudrun"></div><div class="tc" id="hudtc">IDLE</div></div>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="hud-kicker"><b>✶</b> Restricted · organisers only</div>
+      <h1>Game upload <em id="hdate">--/--</em></h1>
+      <p>Drop the full game video here. It goes up in 250 MB pieces that resume if your connection drops, then gets joined back into the original file for processing. Keep this tab open until every cell turns coral.</p>
+    </div>
+    <a class="back" href="../">← All games</a>
+  </header>
+
+  <section id="gate" hidden>
+    <form id="gateform" class="panel hud-panel hud-corners" style="display:grid;gap:14px">
+      <label class="f">Upload passcode<input id="gatein" type="password" autocomplete="current-password" required></label>
+      <button class="btn pri" type="submit">Unlock</button>
+      <p id="gatemsg" class="msg" style="margin:0;min-height:1.2em"></p>
+    </form>
+  </section>
+
+  <section id="app" hidden style="display:grid;gap:22px">
+    <div class="panel hud-panel hud-corners" style="display:grid;gap:16px">
+      <div class="row">
+        <label class="f">Game date<input id="gdate" type="date"></label>
+        <label class="f" style="flex:3 1 260px">Note (optional)<input id="gnote" type="text" maxlength="200" placeholder="e.g. Sunday 10/4, dark vs light, field 2"></label>
+      </div>
+      <label class="drop" id="drop" for="file"><input id="file" type="file" accept="video/*,.mp4,.mov,.m4v,.mkv,.avi,.mts,.insv" multiple hidden>
+        <b>Drop video files here</b><span>or tap to choose · MP4, MOV and other video files up to 40 GB</span></label>
+      <p class="note" style="margin:0">If the upload stops (lid closed, Wi-Fi drops), choose the same file again with the same date: it picks up from the last finished piece.</p>
+    </div>
+    <div id="jobs" style="display:grid;gap:14px"></div>
+    <div>
+      <div class="row" style="justify-content:space-between;margin-bottom:10px"><span class="hud-kicker"><b>✶</b> Recent uploads</span><button class="btn" id="refresh" type="button">Refresh</button></div>
+      <div class="list" id="list"><div><span>Loading…</span></div></div>
+    </div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/tus-js-client@4.3.1/dist/tus.min.js" integrity="sha384-UlHjK3F7TCQCEUpnoa1ohMbP2oaWB3Aypv4gMo511vaZ86uUZ0Zv7UzZ0J1zRUT1" crossorigin="anonymous"></script>
+<script>
+(function () {
+  const FN = 'https://dzdnalyoetytionuhkcf.supabase.co/functions/v1/pickup-upload';
+  const TUS = 'https://dzdnalyoetytionuhkcf.storage.supabase.co/storage/v1/upload/resumable/sign';
+  const PARALLEL = 3, CHUNK = 6 * 1024 * 1024;
+  const $ = (id) => document.getElementById(id);
+  const store = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { console.warn('storage read failed', e); return null; } },
+                  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { console.warn('storage write failed', e); } },
+                  del(k) { try { localStorage.removeItem(k); } catch (e) { console.warn('storage delete failed', e); } } };
+  let pass = store.get('pickupUploadPass') || '';
+  let active = 0, wake = null;
+
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles' }).format(new Date());
+  $('gdate').value = today;
+  const setDate = () => { const [, m, d] = ($('gdate').value || today).split('-'); $('hdate').textContent = m + '/' + d; };
+  $('gdate').addEventListener('change', setDate); setDate();
+
+  // ticker
+  const items = ['Game upload <em>✶</em> Sunday pickup', '250 MB pieces · resumable', '3 pieces in parallel', 'Keep this tab open', 'Joined back into the original file for processing'];
+  const once = items.map((t) => '<span>' + t + '</span><span>✶</span>').join(''); $('hudrun').innerHTML = once + once;
+
+  async function api(body) {
+    const r = await fetch(FN, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ pass, ...body }) });
+    let j = {}; try { j = await r.json(); } catch (e) { console.error('bad response', r.status, e); }
+    if (!r.ok) { const err = new Error(j.error || ('Server error ' + r.status)); err.status = r.status; err.body = j; throw err; }
+    return j;
+  }
+
+  // ---------- gate ----------
+  async function unlock(p) { pass = p; await api({ action: 'check' }); store.set('pickupUploadPass', p); $('gate').hidden = true; $('app').hidden = false; loadList(); }
+  $('gateform').addEventListener('submit', async (e) => {
+    e.preventDefault(); $('gatemsg').textContent = 'Checking…';
+    try { await unlock($('gatein').value.trim()); } catch (err) { $('gatemsg').textContent = err.message; $('gatein').select(); }
+  });
+  (async () => {
+    if (pass) { try { await unlock(pass); return; } catch (e) { console.warn('saved upload passcode rejected', e); store.del('pickupUploadPass'); } }
+    $('gate').hidden = false; $('gatein').focus();
+  })();
+
+  // ---------- recent uploads ----------
+  const gb = (n) => (n / 1073741824).toFixed(2) + ' GB';
+  async function loadList() {
+    const L = $('list'); L.innerHTML = '<div><span>Loading…</span></div>';
+    try {
+      const { uploads } = await api({ action: 'list' });
+      if (!uploads.length) { L.innerHTML = '<div><span>No uploads yet.</span></div>'; return; }
+      L.innerHTML = '';
+      uploads.forEach((u) => {
+        const d = document.createElement('div');
+        const b = document.createElement('b'); b.textContent = u.incomplete ? 'Unfinished upload' : u.name;
+        const r = document.createElement('span'); r.className = 'r'; r.textContent = u.incomplete ? '' : gb(u.size) + ' · ' + u.parts + ' pieces';
+        const s = document.createElement('span'); s.textContent = (u.prefix || '').split('/')[1] + (u.note ? ' · ' + u.note : '') + (u.uploadedAt ? ' · uploaded ' + new Date(u.uploadedAt).toLocaleString() : '');
+        const ok = document.createElement('span'); ok.className = 'r'; ok.textContent = u.incomplete ? 'incomplete' : '✓ complete';
+        d.append(b, r, s, ok); L.append(d);
+      });
+    } catch (e) { console.error('list failed', e); L.innerHTML = ''; const d = document.createElement('div'); const s = document.createElement('span'); s.textContent = 'Could not load the list: ' + e.message; d.append(s); L.append(d); }
+  }
+  $('refresh').onclick = loadList;
+
+  // ---------- file intake ----------
+  const drop = $('drop');
+  ['dragenter', 'dragover'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', (e) => [...e.dataTransfer.files].forEach(startJob));
+  $('file').addEventListener('change', (e) => { [...e.target.files].forEach(startJob); e.target.value = ''; });
+
+  window.addEventListener('beforeunload', (e) => { if (active > 0) { e.preventDefault(); e.returnValue = ''; } });
+  async function holdWake(on) {
+    try { if (on && !wake && navigator.wakeLock) wake = await navigator.wakeLock.request('screen'); if (!on && wake) { await wake.release(); wake = null; } }
+    catch (e) { console.warn('wake lock unavailable', e); }
+  }
+
+  // ---------- one upload job per file ----------
+  function startJob(file) {
+    const el = document.createElement('div'); el.className = 'job hud-panel hud-corners';
+    el.innerHTML = '<div class="top"><span class="nm"></span><span class="st">Preparing…</span></div>' +
+      '<div class="read"><span class="pct">0%</span><dl><dt>Sent</dt><dt>Speed</dt><dt>Time left</dt><dt>Pieces</dt>' +
+      '<dd class="sent">0 / ' + gb(file.size) + '</dd><dd class="spd">–</dd><dd class="eta">–</dd><dd class="pcs">–</dd></dl></div>' +
+      '<div class="cells"></div><div class="acts"><button class="btn pause" type="button">Pause</button><button class="btn retry" type="button" hidden>Retry</button></div><p class="msg" style="margin:0"></p>';
+    el.querySelector('.nm').textContent = file.name;
+    $('jobs').prepend(el);
+    const q = (s) => el.querySelector(s);
+    const status = (t, cls) => { const s = q('.st'); s.textContent = t; s.className = 'st' + (cls ? ' ' + cls : ''); };
+    const fileKey = ['up', file.name, file.size, file.lastModified, $('gdate').value].join('|');
+    let st = null, uploads = {}, sentBy = {}, paused = false, finished = false, samples = [];
+
+    function draw() {
+      const sent = Object.values(sentBy).reduce((a, b) => a + b, 0);
+      const pct = file.size ? sent / file.size : 0;
+      q('.pct').textContent = Math.floor(pct * 100) + '%';
+      q('.sent').textContent = gb(sent) + ' / ' + gb(file.size);
+      const now = performance.now(); samples.push([now, sent]); while (samples.length > 2 && now - samples[0][0] > 15000) samples.shift();
+      const [t0, s0] = samples[0], rate = now - t0 > 1500 ? (sent - s0) / ((now - t0) / 1000) : 0;
+      q('.spd').textContent = rate ? (rate / 1048576).toFixed(1) + ' MB/s' : '–';
+      if (rate) { const left = (file.size - sent) / rate, h = Math.floor(left / 3600), m = Math.round((left % 3600) / 60); q('.eta').textContent = (h ? h + ' h ' : '') + m + ' min'; }
+      if (st) q('.pcs').textContent = st.done.length + ' / ' + st.parts;
+      $('hudtc').textContent = active ? 'UPLOADING ' + Math.floor(pct * 100) + '%' : 'IDLE';
+    }
+    function cell(i) { return q('.cells').children[i]; }
+
+    async function run() {
+      paused = false; q('.retry').hidden = true; q('.pause').hidden = false; q('.pause').textContent = 'Pause'; q('.msg').textContent = '';
+      active++; holdWake(true);
+      try {
+        if (!st) {
+          const saved = store.get(fileKey);
+          if (saved && saved.prefix) st = saved;
+          else { const r = await api({ action: 'start', name: file.name, size: file.size, date: $('gdate').value }); st = { prefix: r.prefix, partSize: r.partSize, parts: r.parts, done: [] }; store.set(fileKey, st); }
+          q('.cells').innerHTML = '<span class="cell"><i></i></span>'.repeat(st.parts);
+          for (let i = 0; i < st.parts; i++) sentBy[i] = st.done.includes(i) ? partLen(i) : 0;
+          st.done.forEach((i) => cell(i).classList.add('done'));
+          if (st.done.length) status('Resuming · ' + st.done.length + ' of ' + st.parts + ' pieces already up');
+        }
+        status('Uploading');
+        const todo = []; for (let i = 0; i < st.parts; i++) if (!st.done.includes(i)) todo.push(i);
+        const worker = async () => { while (todo.length && !paused) await sendPart(todo.shift()); };
+        await Promise.all(Array.from({ length: PARALLEL }, worker));
+        if (paused) { status('Paused'); return; }
+        status('Checking every piece…');
+        const r = await api({ action: 'finish', prefix: st.prefix, manifest: { name: file.name, size: file.size, type: file.type, lastModified: file.lastModified, note: $('gnote').value } });
+        finished = true; store.del(fileKey); status('✓ Uploaded · ' + r.manifest.parts + ' pieces', 'ok');
+        q('.pause').hidden = true; q('.pct').textContent = '100%'; loadList();
+      } catch (e) {
+        console.error('upload failed', e);
+        if (e.body && e.body.bad) { st.done = st.done.filter((i) => !e.body.bad.includes(i)); store.set(fileKey, st); e.body.bad.forEach((i) => { cell(i).className = 'cell err'; sentBy[i] = 0; }); }
+        status('Stopped', 'err'); q('.msg').textContent = e.message + ' Press Retry to continue from where it stopped.'; q('.retry').hidden = false; q('.pause').hidden = true;
+      } finally { active--; if (!active) holdWake(false); draw(); }
+    }
+    const partLen = (i) => (i < st.parts - 1 ? st.partSize : file.size - st.partSize * (st.parts - 1));
+
+    async function sendPart(i) {
+      const { token, path, bucket } = await api({ action: 'part', prefix: st.prefix, index: i });
+      const blob = file.slice(i * st.partSize, i * st.partSize + partLen(i));
+      cell(i).className = 'cell';
+      await new Promise((resolve, reject) => {
+        const up = new tus.Upload(blob, {
+          endpoint: TUS, chunkSize: CHUNK, retryDelays: [0, 2000, 5000, 10000, 20000, 30000],
+          headers: { 'x-signature': token, 'x-upsert': 'true' },
+          uploadDataDuringCreation: true, removeFingerprintOnSuccess: true,
+          fingerprint: () => Promise.resolve(fileKey + '#' + i),
+          metadata: { bucketName: bucket, objectName: path, contentType: 'application/octet-stream', cacheControl: '3600' },
+          onProgress: (s) => { sentBy[i] = s; const c = cell(i).querySelector('i'); if (c) c.style.width = (100 * s / blob.size) + '%'; draw(); },
+          onSuccess: () => { sentBy[i] = blob.size; cell(i).className = 'cell done'; st.done.push(i); store.set(fileKey, st); delete uploads[i]; draw(); resolve(); },
+          onError: (err) => { delete uploads[i]; if (paused) return resolve(); cell(i).className = 'cell err'; reject(new Error('Piece ' + (i + 1) + ' failed: ' + (err && err.message ? err.message.split('\n')[0] : err))); },
+        });
+        uploads[i] = { up, resolve };
+        up.findPreviousUploads().then((prev) => { if (prev.length) up.resumeFromPreviousUpload(prev[0]); up.start(); }).catch(reject);
+      });
+    }
+
+    q('.pause').onclick = () => {
+      if (!paused) { paused = true; Object.values(uploads).forEach((u) => { u.up.abort(); u.resolve(); }); uploads = {}; q('.pause').textContent = 'Resume'; status('Pausing…'); }
+      else run();
+    };
+    q('.retry').onclick = run;
+    setInterval(() => { if (!finished && active) draw(); }, 1000);
+    run();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+/* HUD skin shared by the match file and the replay. Cinematic single dark theme:
+   near-black ground, film grain + dot grid, hairline frames with crop marks, mono labels, one coral accent. */
+:root{
+  color-scheme:dark;
+  --h-bg:#060708; --h-panel:#0c0e10; --h-panel2:#121417; --h-line:#25282c; --h-line2:#3a3e44;
+  --h-ink:#ece8e1; --h-ink2:#a39e95; --h-ink3:#6d6961;
+  --h-coral:#ff5a36; --h-coral-soft:rgba(255,90,54,.13); --h-amber:#ffb347; --h-red:#ff5b4d;
+  --h-mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --h-sans:"Geist",system-ui,-apple-system,"Segoe UI","PingFang SC",sans-serif;
+  --h-disp:"Archivo Narrow","Arial Narrow",system-ui,sans-serif;
+  --h-dot:"Doto","Geist Mono",ui-monospace,monospace;
+}
+html{background:var(--h-bg)}
+body{background:var(--h-bg)!important;color:var(--h-ink)}
+::selection{background:var(--h-coral);color:#140603}
+
+/* ---------- screen texture: grain + dot grid + vignette ---------- */
+.hud-screen{position:fixed;inset:0;pointer-events:none;z-index:70}
+.hud-screen::before{content:"";position:absolute;inset:-50%;opacity:.07;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:hud-grain 1.2s steps(6) infinite}
+.hud-screen::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(rgba(255,255,255,.055) .7px,transparent 1px) 0 0/4px 4px,
+             radial-gradient(ellipse at 50% 40%,transparent 55%,rgba(0,0,0,.55) 100%)}
+@keyframes hud-grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+@media (prefers-reduced-motion:reduce){.hud-screen::before{animation:none}.hud-ticker .run{animation:none!important}}
+
+/* ---------- fixed frame: crop marks, corner labels, left ruler, ticker ---------- */
+.hud-frame{position:fixed;inset:calc(env(safe-area-inset-top,0px) + 10px) 10px calc(env(safe-area-inset-bottom,0px) + 10px);pointer-events:none;z-index:65;
+  font:500 10px/1 var(--h-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--h-ink3)}
+.hud-frame .cm{position:absolute;width:13px;height:13px}
+.hud-frame .cm::before,.hud-frame .cm::after{content:"";position:absolute;background:var(--h-ink3)}
+.hud-frame .cm::before{left:6px;top:0;width:1px;height:13px}.hud-frame .cm::after{top:6px;left:0;height:1px;width:13px}
+.hud-frame .tl{left:0;top:0}.hud-frame .tr{right:0;top:0}.hud-frame .bl{left:0;bottom:0}.hud-frame .br{right:0;bottom:0}
+.hud-frame .lab{position:absolute;white-space:nowrap;background:rgba(6,7,8,.88);padding:3px 7px}
+.hud-frame .l1{left:18px;top:-1px}.hud-frame .l2{right:18px;top:-1px;text-align:right}
+.hud-frame .l2 i{font-style:normal;color:var(--h-coral)}
+.hud-ruler{position:absolute;left:0;top:18%;bottom:18%;width:12px;
+  background:repeating-linear-gradient(to bottom,var(--h-line2) 0 1px,transparent 1px 14px);
+  -webkit-mask:linear-gradient(90deg,#000 45%,transparent 46%);mask:linear-gradient(90deg,#000 45%,transparent 46%)}
+.hud-ruler::after{content:"";position:absolute;left:0;top:0;bottom:0;width:12px;background:repeating-linear-gradient(to bottom,var(--h-ink3) 0 1px,transparent 1px 70px)}
+.hud-ruler b{position:absolute;left:16px;font:500 9px var(--h-mono);color:var(--h-ink3);letter-spacing:.1em}
+.hud-ruler .mk{position:absolute;left:-2px;width:18px;height:2px;background:var(--h-coral);box-shadow:0 0 8px var(--h-coral)}
+.hud-ticker{position:fixed;left:0;right:0;bottom:0;z-index:66;height:calc(26px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);
+  background:rgba(6,7,8,.86);border-top:1px solid var(--h-line);overflow:hidden;display:flex;align-items:center;
+  font:500 10.5px/1 var(--h-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--h-ink2);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.hud-ticker .run{display:flex;white-space:nowrap;animation:hud-tick 70s linear infinite}
+.hud-ticker .run span{padding:0 18px}.hud-ticker .run em{font-style:normal;color:var(--h-coral)}
+.hud-ticker .tc{position:absolute;right:0;top:0;bottom:env(safe-area-inset-bottom,0px);display:flex;align-items:center;gap:8px;padding:0 14px 0 18px;
+  background:linear-gradient(90deg,transparent,var(--h-bg) 22%);color:var(--h-ink);font-variant-numeric:tabular-nums}
+.hud-ticker .tc::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--h-coral);box-shadow:0 0 8px var(--h-coral);animation:hud-blink 1.6s steps(2) infinite}
+@keyframes hud-tick{to{transform:translateX(-50%)}}
+@keyframes hud-blink{50%{opacity:.25}}
+@media (max-width:700px){.hud-ruler,.hud-frame .l2{display:none}.hud-frame{inset:6px}}
+
+/* ---------- shared bits ---------- */
+.hud-spark{display:inline-block;width:.9em;height:.9em;vertical-align:-.08em;background:var(--h-coral);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0l2.2 8.1L21 3l-4.6 7.1L24 12l-7.6 1.9L21 21l-6.8-5.1L12 24l-2.2-8.1L3 21l4.6-7.1L0 12l7.6-1.9L3 3l6.8 5.1z'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0l2.2 8.1L21 3l-4.6 7.1L24 12l-7.6 1.9L21 21l-6.8-5.1L12 24l-2.2-8.1L3 21l4.6-7.1L0 12l7.6-1.9L3 3l6.8 5.1z'/%3E%3C/svg%3E") center/contain no-repeat;
+  filter:drop-shadow(0 0 6px rgba(255,90,54,.7))}
+.hud-kicker{font:500 10.5px/1.3 var(--h-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--h-ink3)}
+.hud-kicker b{color:var(--h-coral);font-weight:500}
+/* hairline panel with crop-mark corners */
+.hud-panel{position:relative;background:var(--h-panel);border:1px solid var(--h-line);border-radius:2px}
+.hud-corners{background-image:
+  linear-gradient(var(--h-ink3),var(--h-ink3)),linear-gradient(var(--h-ink3),var(--h-ink3)),
+  linear-gradient(var(--h-ink3),var(--h-ink3)),linear-gradient(var(--h-ink3),var(--h-ink3)),
+  linear-gradient(var(--h-ink3),var(--h-ink3)),linear-gradient(var(--h-ink3),var(--h-ink3)),
+  linear-gradient(var(--h-ink3),var(--h-ink3)),linear-gradient(var(--h-ink3),var(--h-ink3));
+  background-repeat:no-repeat;
+  background-size:9px 1px,1px 9px,9px 1px,1px 9px,9px 1px,1px 9px,9px 1px,1px 9px;
+  background-position:left -1px top -1px,left -1px top -1px,right -1px top -1px,right -1px top -1px,left -1px bottom -1px,left -1px bottom -1px,right -1px bottom -1px,right -1px bottom -1px}
+/* segmented readout bar with dot-matrix digits */
+.hud-seg{display:flex;align-items:center;gap:10px}
+.hud-seg .dig{font:700 26px/1 var(--h-dot);color:var(--h-coral);text-shadow:0 0 10px rgba(255,90,54,.55);font-variant-numeric:tabular-nums}
+.hud-seg .cells{flex:1;height:22px;background:
+  repeating-linear-gradient(90deg,var(--h-panel2) 0 calc(100%/48 - 2px),transparent calc(100%/48 - 2px) calc(100%/48));
+  border-top:1px solid var(--h-line);border-bottom:1px solid var(--h-line);position:relative}
+.hud-seg .cells i{position:absolute;left:0;top:0;bottom:0;background:
+  repeating-linear-gradient(90deg,var(--h-coral) 0 calc(100%/var(--n,24) - 2px),transparent calc(100%/var(--n,24) - 2px) calc(100%/var(--n,24)));
+  opacity:.85;box-shadow:0 0 12px rgba(255,90,54,.35)}
