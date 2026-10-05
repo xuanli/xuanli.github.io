@@ -51,11 +51,12 @@ a.game:hover{border-color:var(--h-coral);background:#110b09}
   </header>
 
   <section class="games" aria-label="Games">
-    <div class="game soon hud-panel hud-corners">
+    <div class="game hud-panel hud-corners">
       <span class="d">10/04</span>
       <span class="t">Sunday 10/4 · dark vs light</span>
-      <span class="go">Processing soon</span>
-      <span class="s">Match file with a highlight reel for every player. Being built after the upload.</span>
+      <span class="go">New</span>
+      <span class="s">4 stretches · 1:29 of football · possession dark 47% light 53% · a highlight reel for every player</span>
+      <span class="links"><a href="2026-10-04/">Match file</a></span>
     </div>
     <div class="game hud-panel hud-corners">
       <span class="d">09/27</span>
@@ -70,7 +71,7 @@ a.game:hover{border-color:var(--h-coral);background:#110b09}
 </div>
 <script>
 (function () {
-  const items = ['Sunday pickup <em>✶</em> archive', '2 games filmed', 'Dark vs light', 'Next: 10/04 match file with player highlight reels', 'Disputed goal 9/27 11:56 <em>→</em> outside'];
+  const items = ['Sunday pickup <em>✶</em> archive', '2 games filmed', 'Dark vs light', 'New: 10/04 match file with a highlight reel for every player', 'Disputed goal 9/27 11:56 <em>→</em> outside'];
   const once = items.map((t) => '<span>' + t + '</span><span>✶</span>').join('');
   document.getElementById('hudrun').innerHTML = once + once;
   const tc = document.getElementById('hudtc');
