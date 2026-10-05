@@ -96,6 +96,7 @@ input:focus{outline:1px solid var(--h-coral);border-color:var(--h-coral)}
       <label class="drop" id="drop" for="file"><input id="file" type="file" accept="video/*,.mp4,.mov,.m4v,.mkv,.avi,.mts,.insv" multiple hidden>
         <b>Drop video files here</b><span>or tap to choose · MP4, MOV and other video files up to 40 GB</span></label>
       <p class="note" style="margin:0">If the upload stops (lid closed, Wi-Fi drops), choose the same file again with the same date: it picks up from the last finished piece.</p>
+      <p class="note" style="margin:0;color:var(--h-amber)"><b>On iPhone:</b> tap the box, then <b>Choose File</b> and pick the video in the Files app. If you pick it from <b>Photo Library</b>, iOS first copies (and may compress) the whole video before the upload can start: that shows its own progress bar, which can sit around 90% for a long time. Save the video to Files first (Share → Save to Files), or upload from a computer.</p>
     </div>
     <div id="jobs" style="display:grid;gap:14px"></div>
     <div>
@@ -186,6 +187,7 @@ input:focus{outline:1px solid var(--h-coral);border-color:var(--h-coral)}
       '<dd class="sent">0 / ' + gb(file.size) + '</dd><dd class="spd">–</dd><dd class="eta">–</dd><dd class="pcs">–</dd></dl></div>' +
       '<div class="cells"></div><div class="acts"><button class="btn pause" type="button">Pause</button><button class="btn retry" type="button" hidden>Retry</button></div><p class="msg" style="margin:0"></p>';
     el.querySelector('.nm').textContent = file.name;
+    el.querySelector('.st').textContent = 'File received · ' + (file.size / 1073741824).toFixed(2) + ' GB · starting…';
     $('jobs').prepend(el);
     const q = (s) => el.querySelector(s);
     const status = (t, cls) => { const s = q('.st'); s.textContent = t; s.className = 'st' + (cls ? ' ' + cls : ''); };
