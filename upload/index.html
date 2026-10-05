@@ -74,7 +74,7 @@ input:focus{outline:1px solid var(--h-coral);border-color:var(--h-coral)}
     <div>
       <div class="hud-kicker"><b>✶</b> Restricted · organisers only</div>
       <h1>Game upload <em id="hdate">--/--</em></h1>
-      <p>Drop the full game video here. It goes up in 250 MB pieces that resume if your connection drops, then gets joined back into the original file for processing. Keep this tab open until every cell turns coral.</p>
+      <p>Drop the full game video here. It goes up in 100 MB pieces that resume if your connection drops, then gets joined back into the original file for processing. Keep this tab open until every cell turns coral.</p>
     </div>
     <a class="back" href="../">← All games</a>
   </header>
@@ -110,8 +110,10 @@ input:focus{outline:1px solid var(--h-coral);border-color:var(--h-coral)}
 <script>
 (function () {
   const FN = 'https://dzdnalyoetytionuhkcf.supabase.co/functions/v1/pickup-upload';
-  const TUS = 'https://dzdnalyoetytionuhkcf.storage.supabase.co/storage/v1/upload/resumable/sign';
-  const PARALLEL = 3, CHUNK = 6 * 1024 * 1024;
+  // Browsers share one HTTP/2 connection per host, which caps a host at roughly 8 MB/s.
+  // Two hostnames serve the same storage, so alternating pieces between them doubles the connections.
+  const TUS_HOSTS = ['https://dzdnalyoetytionuhkcf.storage.supabase.co', 'https://dzdnalyoetytionuhkcf.supabase.co'].map((h) => h + '/storage/v1/upload/resumable/sign');
+  const PARALLEL = 8, CHUNK = 6 * 1024 * 1024;
   const $ = (id) => document.getElementById(id);
   const store = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { console.warn('storage read failed', e); return null; } },
                   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { console.warn('storage write failed', e); } },
@@ -125,7 +127,7 @@ input:focus{outline:1px solid var(--h-coral);border-color:var(--h-coral)}
   $('gdate').addEventListener('change', setDate); setDate();
 
   // ticker
-  const items = ['Game upload <em>✶</em> Sunday pickup', '250 MB pieces · resumable', '3 pieces in parallel', 'Keep this tab open', 'Joined back into the original file for processing'];
+  const items = ['Game upload <em>✶</em> Sunday pickup', '100 MB pieces · resumable', '8 pieces in parallel', 'Keep this tab open', 'Joined back into the original file for processing'];
   const once = items.map((t) => '<span>' + t + '</span><span>✶</span>').join(''); $('hudrun').innerHTML = once + once;
 
   async function api(body) {
@@ -191,7 +193,7 @@ input:focus{outline:1px solid var(--h-coral);border-color:var(--h-coral)}
     $('jobs').prepend(el);
     const q = (s) => el.querySelector(s);
     const status = (t, cls) => { const s = q('.st'); s.textContent = t; s.className = 'st' + (cls ? ' ' + cls : ''); };
-    const fileKey = ['up', file.name, file.size, file.lastModified, $('gdate').value].join('|');
+    const fileKey = ['up2', file.name, file.size, file.lastModified, $('gdate').value].join('|');
     let st = null, uploads = {}, sentBy = {}, paused = false, finished = false, samples = [];
 
     function draw() {
@@ -244,7 +246,7 @@ input:focus{outline:1px solid var(--h-coral);border-color:var(--h-coral)}
       cell(i).className = 'cell';
       await new Promise((resolve, reject) => {
         const up = new tus.Upload(blob, {
-          endpoint: TUS, chunkSize: CHUNK, retryDelays: [0, 2000, 5000, 10000, 20000, 30000],
+          endpoint: TUS_HOSTS[i % TUS_HOSTS.length], chunkSize: CHUNK, retryDelays: [0, 2000, 5000, 10000, 20000, 30000],
           headers: { 'x-signature': token, 'x-upsert': 'true' },
           uploadDataDuringCreation: true, removeFingerprintOnSuccess: true,
           fingerprint: () => Promise.resolve(fileKey + '#' + i),
