@@ -52,9 +52,16 @@ a.game:hover{border-color:var(--h-coral);background:#110b09}
 
   <section class="games" aria-label="Games">
     <div class="game hud-panel hud-corners">
+      <span class="d">10/11</span>
+      <span class="t">Sunday 10/11 · dark vs light</span>
+      <span class="go">New</span>
+      <span class="s">2 halves · mostly 9 v 9 · possession dark 54% light 46% · players identified by Claude Opus</span>
+      <span class="links"><a href="2026-10-11/">Match file</a></span>
+    </div>
+    <div class="game hud-panel hud-corners">
       <span class="d">10/04</span>
       <span class="t">Sunday 10/4 · dark vs light</span>
-      <span class="go">New</span>
+      <span class="go">Match file</span>
       <span class="s">4 stretches · 1:29 of football · possession dark 47% light 53% · a highlight reel for every player</span>
       <span class="links"><a href="2026-10-04/">Match file</a></span>
     </div>
@@ -71,7 +78,7 @@ a.game:hover{border-color:var(--h-coral);background:#110b09}
 </div>
 <script>
 (function () {
-  const items = ['Sunday pickup <em>✶</em> archive', '2 games filmed', 'Dark vs light', 'New: 10/04 match file with a highlight reel for every player', 'Disputed goal 9/27 11:56 <em>→</em> outside'];
+  const items = ['Sunday pickup <em>✶</em> archive', '3 games filmed', 'Dark vs light', 'New: 10/11 match file, players identified by Claude Opus', 'Disputed goal 9/27 11:56 <em>→</em> outside'];
   const once = items.map((t) => '<span>' + t + '</span><span>✶</span>').join('');
   document.getElementById('hudrun').innerHTML = once + once;
   const tc = document.getElementById('hudtc');
