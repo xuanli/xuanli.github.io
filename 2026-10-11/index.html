@@ -332,6 +332,13 @@ input[type=range]#seek{-webkit-appearance:none;appearance:none;height:16px;backg
 .vbox.playing.idle,.vbox.playing.idle video{cursor:none}
 .vbox.playing.idle .vbar,.vbox.playing.idle .bigplay{opacity:0!important}
 </style>
+<style id="mvcss">
+.mvbox{padding:16px 16px 14px;margin-bottom:22px}
+.mvbox .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.mvbox h2{margin:0}
+.mvbox video{width:100%;aspect-ratio:16/9;background:#000;border-radius:1px;display:block;box-shadow:0 0 0 1px var(--h-line2),0 24px 60px -30px rgba(255,90,54,.35)}
+.mvbox p{margin:10px 0 0;font-size:.86rem;color:var(--h-ink2)}
+</style>
 </head>
 <body>
 <!--HUD:START--><div class="hud-screen" aria-hidden="true"></div>
@@ -348,6 +355,11 @@ input[type=range]#seek{-webkit-appearance:none;appearance:none;height:16px;backg
   <p class="status" id="status" hidden></p>
   <div class="appgrid">
     <main>
+      <section id="mvbox" class="mvbox hud-panel hud-corners">
+        <div class="row"><h2 class="sec">Match MV</h2><span class="hud-kicker"><b>✶</b> 1:52 · one song · every cut on the beat</span></div>
+        <video controls playsinline preload="none" poster="https://storage.komos.ai/storage/v1/object/public/sunday_pickup_game/2026-10-11/mtv_poster.jpg" src="https://storage.komos.ai/storage/v1/object/public/sunday_pickup_game/2026-10-11/mtv.mp4"></video>
+        <p>A song made from today's sideline lines, cut to the beat with the day's footage. Nicknames appear when they are sung.</p>
+      </section>
       <section id="qa" class="qabox" hidden>
         <h2 class="sec">Ask about the game</h2>
         <p class="note" style="margin-top:0">Ask anything, in English or Chinese. An AI answers from the stats, player notes and the full sideline transcript. Tap a time in an answer to watch it.</p>
@@ -915,5 +927,7 @@ function poke(){v.classList.add('show');v.classList.remove('idle');clearTimeout(
 ['mousemove','touchstart','keydown','click'].forEach(e=>v.addEventListener(e,poke,{passive:true}));
 document.addEventListener('fullscreenchange',poke);document.addEventListener('keydown',e=>{if(document.fullscreenElement)poke();});})();
 </script>
+<script id="mvjs">(function(){const mv=document.querySelector('#mvbox video'),g=document.getElementById('vid');if(!mv||!g)return;
+mv.addEventListener('play',()=>{try{g.pause()}catch(e){console.warn(e)}});g.addEventListener('play',()=>{try{mv.pause()}catch(e){console.warn(e)}});})();</script>
 </body>
 </html>
