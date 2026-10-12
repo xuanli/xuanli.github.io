@@ -324,6 +324,14 @@ input[type=range]#seek{-webkit-appearance:none;appearance:none;height:16px;backg
 .qa{border-color:var(--h-line)!important}
 </style><!--HUD:END-->
 
+<style id="idlefix">
+.vbox.playing:hover .bigplay{opacity:0!important}
+.vbox.playing.show .bigplay{opacity:.85!important}
+.vbox:hover .vbar{opacity:0}
+.vbox:not(.playing) .vbar,.vbox.show .vbar,.vbox:focus-within.show .vbar{opacity:1}
+.vbox.playing.idle,.vbox.playing.idle video{cursor:none}
+.vbox.playing.idle .vbar,.vbox.playing.idle .bigplay{opacity:0!important}
+</style>
 </head>
 <body>
 <!--HUD:START--><div class="hud-screen" aria-hidden="true"></div>
@@ -901,5 +909,11 @@ start();
   }, 400);
 })();
 </script><!--HUD:END-->
+<script id="idlefixjs">
+(function(){const v=document.getElementById('vbox');if(!v)return;let t=null;
+function poke(){v.classList.add('show');v.classList.remove('idle');clearTimeout(t);t=setTimeout(()=>{if(v.classList.contains('playing')){v.classList.remove('show');v.classList.add('idle');}},2000);}
+['mousemove','touchstart','keydown','click'].forEach(e=>v.addEventListener(e,poke,{passive:true}));
+document.addEventListener('fullscreenchange',poke);document.addEventListener('keydown',e=>{if(document.fullscreenElement)poke();});})();
+</script>
 </body>
 </html>
